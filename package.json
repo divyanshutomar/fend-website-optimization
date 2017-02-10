@@ -1,0 +1,25 @@
+{
+  "name": "fend-website-optimization",
+  "version": "1.0.0",
+  "description": "Website optimization of portfolio project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/divyanshutomar/fend-website-optimization.git"
+  },
+  "keywords": [
+    "optimization",
+    "nanodegree",
+    "project",
+    "portfolio"
+  ],
+  "author": "Divyanshu Tomar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/divyanshutomar/fend-website-optimization/issues"
+  },
+  "homepage": "https://github.com/divyanshutomar/fend-website-optimization#readme"
+}
