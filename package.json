@@ -4,7 +4,12 @@
   "description": "Website optimization of portfolio project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf dist",
+    "build": "./node_modules/.bin/gulp build",
+    "compile": "npm run clean && npm run build",
+    "runserver": "./node_modules/.bin/http-server -p 8080 dist",
+    "startngrok": "./ngrok http 8080"
   },
   "repository": {
     "type": "git",
@@ -21,5 +26,13 @@
   "bugs": {
     "url": "https://github.com/divyanshutomar/fend-website-optimization/issues"
   },
-  "homepage": "https://github.com/divyanshutomar/fend-website-optimization#readme"
+  "homepage": "https://github.com/divyanshutomar/fend-website-optimization#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-htmlclean": "^2.7.9",
+    "gulp-imagemin": "^3.1.1",
+    "gulp-strip-debug": "^1.1.0",
+    "gulp-uglify": "^2.0.1"
+  }
 }
