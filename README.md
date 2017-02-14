@@ -28,6 +28,7 @@ Performed the following optimizations:
 ### Building and Running this project
 
 * Clone the repository
+* Run command `npm install` to install all the required dependencies of the project.
 * Run command `npm run compile` to compile the contents of `src` folder to `dist` folder which can then be served by an web server.
 * Run command `npm run runserver` to start a local node server that will serve files from dist folder.
 * Run commadn `npm run startngrok` to start ngrok service to make your portfolio accessble to publically.
@@ -35,6 +36,7 @@ Performed the following optimizations:
 ### Deploying to Github Pages
 
 * Clone the repository
+* Run command `npm install` to install all the required dependencies of the project.
 * Run command `npm run compile` to compile the contents of `src` folder to `dist` folder which can then be served by an web server.
 * Run command `npm run deploy` to push the contents of dist to gh-pages branch and serve the portfolio using gh-pages service.
 
