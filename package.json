@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf dist",
     "build": "./node_modules/.bin/gulp build",
+    "deploy": "./node_modules/.bin/gh-pages-deploy",
     "compile": "npm run clean && npm run build",
     "runserver": "./node_modules/.bin/http-server -p 8080 -c604000 dist",
     "startngrok": "./ngrok http 8080"
