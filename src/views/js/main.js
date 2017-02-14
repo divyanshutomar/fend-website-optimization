@@ -425,7 +425,7 @@ var resizePizzas = function(size) {
   // Returns the size difference to change a pizza element from one size to another. Called by changePizzaSlices(size).
   function determineDx (elem, size) {
     var oldwidth = elem.offsetWidth;
-    // Switch to document.getElementById instead of document.querySelector
+    // document.getElementById replaced in place of querySelector
     var windowwidth = document.getElementById("randomPizzas").offsetWidth;
     var oldsize = oldwidth / windowwidth;
 
@@ -469,11 +469,10 @@ var resizePizzas = function(size) {
         console.log("bug in sizeSwitcher");
     }
 
-// Move document.document.querySelectorAll(".randomPizzaContainer"); outside the for loop
-// Switch to document.getElementsByClassName from document.querySelectorAll
+// Introduced document.getElementsByClassName in place of document.querySelectorAll
     var randomPizzas = document.getElementsByClassName("randomPizzaContainer");
 
-// Move randomPizzas.length to a local variable so the array's length property isn't accessed on each iteration
+// Made randomPizzas.length a local variable
     var pizzaLength = randomPizzas.length
 
     for (var i = 0; i < pizzaLength; i++) {
@@ -494,7 +493,7 @@ var resizePizzas = function(size) {
 window.performance.mark("mark_start_generating"); // collect timing data
 
 // This for-loop actually creates and appends all of the pizzas when the page loads
-// Move var pizzasDiv = document.getElementById("randomPizzas"); out of the for loop so the loop only makes one DOM call
+// var pizzasDiv = document.getElementById("randomPizzas"); is now out of the for loop so the loop only makes one DOM call
 var pizzasDiv = document.getElementById("randomPizzas");
 for (var i = 2; i < 100; i++) {
   pizzasDiv.appendChild(pizzaElementGenerator(i));
