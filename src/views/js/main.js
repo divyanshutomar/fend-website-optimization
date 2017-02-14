@@ -1,24 +1,5 @@
-/*
-Welcome to the 60fps project! Your goal is to make Cam's Pizzeria website run
-jank-free at 60 frames per second.
-
-There are two major issues in this code that lead to sub-60fps performance. Can
-you spot and fix both?
-
-
-Built into the code, you'll find a few instances of the User Timing API
-(window.performance), which will be console.log()ing frame rate data into the
-browser console. To learn more about User Timing API, check out:
-http://www.html5rocks.com/en/tutorials/webperformance/usertiming/
-
-Creator:
-Cameron Pittman, Udacity Course Developer
-cameron *at* udacity *dot* com
-*/
-
 // As you may have realized, this website randomly generates pizzas.
 // Here are arrays of all possible pizza ingredients.
-"use strict";
 var pizzaIngredients = {};
 pizzaIngredients.meats = [
   "Pepperoni",
@@ -379,7 +360,7 @@ var pizzaElementGenerator = function(i) {
   pizzaContainer.id = "pizza" + i;                // gives each pizza element a unique id
   pizzaImageContainer.classList.add("col-md-6");
 
-  pizzaImage.src = "images/pizza.png";
+  pizzaImage.src = "images/pizza.png";  /* Compressed Images */
   pizzaImage.classList.add("img-responsive");
   pizzaImageContainer.appendChild(pizzaImage);
   pizzaContainer.appendChild(pizzaImageContainer);
@@ -399,21 +380,24 @@ var pizzaElementGenerator = function(i) {
   return pizzaContainer;
 };
 
-// resizePizzas(size) is called when the slider in the "Our Pizzas" section of the website moves.
-var resizePizzas = function(size) {
-  window.performance.mark("mark_start_resize");   // User Timing API function
+/*----------------------------------------------------------------------------------------------------------------------------------------*/
 
-  // Changes the value for the size of the pizza above the slider
+// resizePizzas(size) is called [pizza.html/101] when the slider in the "Our Pizzas" section of the website moves.
+var resizePizzas = function(size) {
+  window.performance.mark("mark_start_resize");  // User Timing API function
+
+  // Changes pizza size label above the slider
   function changeSliderLabel(size) {
-    switch(size) {
+  /* Replaced querySelector by getElementById*/
+  switch(size) {
       case "1":
-        document.querySelector("#pizzaSize").innerHTML = "Small";
+        document.getElementById("pizzaSize").innerHTML = "Small";
         return;
       case "2":
-        document.querySelector("#pizzaSize").innerHTML = "Medium";
+        document.getElementById("pizzaSize").innerHTML = "Medium";
         return;
       case "3":
-        document.querySelector("#pizzaSize").innerHTML = "Large";
+        document.getElementById("pizzaSize").innerHTML = "Large";
         return;
       default:
         console.log("bug in changeSliderLabel");
@@ -423,38 +407,13 @@ var resizePizzas = function(size) {
   changeSliderLabel(size);
 
   // Returns the size difference to change a pizza element from one size to another. Called by changePizzaSlices(size).
-  function determineDx (elem, size) {
-    var oldwidth = elem.offsetWidth;
-    // document.getElementById replaced in place of querySelector
-    var windowwidth = document.getElementById("randomPizzas").offsetWidth;
-    var oldsize = oldwidth / windowwidth;
 
-    // TODO: change to 3 sizes? no more xl?
-    // Changes the slider value to a percent width
-    function sizeSwitcher (size) {
-      switch(size) {
-        case "1":
-          return 0.25;
-        case "2":
-          return 0.3333;
-        case "3":
-          return 0.5;
-        default:
-          console.log("bug in sizeSwitcher");
-      }
-    }
-
-    var newsize = sizeSwitcher(size);
-    var dx = (newsize - oldsize) * windowwidth;
-
-    return dx;
-  }
+  /* Deleted determineDx & sizeSwitcher*/
 
   // Iterates through pizza elements on the page and changes their widths
-  // Refactored to avoid Forced Synchronous Layout, avoid use of determineDx to determine newwidth
-  // Borrowed from https://www.udacity.com/course/viewer#!/c-ud860-nd/l-4147498575/e-4154208580/m-4240308553
   function changePizzaSizes(size) {
-    var newWidth;
+
+    // Changes the slider value to a percent width
     switch(size) {
       case "1":
         newWidth = 25;
@@ -466,35 +425,32 @@ var resizePizzas = function(size) {
         newWidth = 50;
         break;
       default:
-        console.log("bug in sizeSwitcher");
+        console.log("bug in changePizzaSizes");
     }
 
-// Introduced document.getElementsByClassName in place of document.querySelectorAll
-    var randomPizzas = document.getElementsByClassName("randomPizzaContainer");
-
-// Made randomPizzas.length a local variable
-    var pizzaLength = randomPizzas.length
-
-    for (var i = 0; i < pizzaLength; i++) {
-      randomPizzas[i].style.width = newWidth +"%";
+    /* DOM call repition avoided */
+    var randomPizza = document.getElementsByClassName('randomPizzaContainer');  // GETS ALL ELEMENTS WITH randomPizzaContainer CLASS NAME
+    var randomPizzaLength = randomPizza.length;  // GETS NUMBER OF ELEMENTS WITH randomPizzaContainer CLASS NAME
+    for (var i = 0; i < randomPizzaLength; i++) {
+      randomPizza[i].style.width = newWidth + "%";  // CHANGES WIDTH OF EACH ELEMENT TO NEW WIDTH
     }
   }
-
   changePizzaSizes(size);
 
   // User Timing API is awesome
   window.performance.mark("mark_end_resize");
   window.performance.measure("measure_pizza_resize", "mark_start_resize", "mark_end_resize");
   var timeToResize = window.performance.getEntriesByName("measure_pizza_resize");
-  //console.log("Time to resize pizzas: " + timeToResize[0].duration + "ms");
   console.log("Time to resize pizzas: " + timeToResize[timeToResize.length-1].duration + "ms");
 };
 
 window.performance.mark("mark_start_generating"); // collect timing data
 
-// This for-loop actually creates and appends all of the pizzas when the page loads
-// var pizzasDiv = document.getElementById("randomPizzas"); is now out of the for loop so the loop only makes one DOM call
+/*----------------------------------------------------------------------------------------------------------------------------------------*/
+
+/* DOM call repition avoided */
 var pizzasDiv = document.getElementById("randomPizzas");
+// This for-loop actually creates and appends all of the pizzas when the page loads
 for (var i = 2; i < 100; i++) {
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
@@ -519,71 +475,30 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
   console.log("Average time to generate last 10 frames: " + sum / 10 + "ms");
 }
 
-// credit mcs https://discussions.udacity.com/t/p4-pizza-scrolling-rasterize-paint/30713/12
-// for requestAnimationFrame
-// Change animationReadyCheck to updatePositions
-// credit etienne https://discussions.udacity.com/t/forced-reflow-new-issue/158305/19
-window.addEventListener('scroll', updatePositions);
-
-// function animationReadyCheck() {
-//   if (!window.animating) {
-//     window.requestAnimationFrame(updatePositions);
-//     window.animating = true;
-//   }
-// }
-
-
-// The following code for sliding background pizzas was pulled from Ilya's demo found at:
-// https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
+/*----------------------------------------------------------------------------------------------------------------------------------------*/
 
 // Moves the sliding background pizzas based on scroll position
-// credit https://github.com/Sarika-C/frontend-nanodegree-mobile-portfolio/blob/master/views/js/main.js
-// credit mcs https://discussions.udacity.com/t/p4-pizza-scrolling-rasterize-paint/30713/13
 function updatePositions() {
-  window.frame++;
+  frame++;
   window.performance.mark("mark_start_frame");
 
-// Move constants out of the for loop.
-// credit https://github.com/Sarika-C/frontend-nanodegree-mobile-portfolio/blob/master/views/js/main.js\
-// move this line to document.addEventListener('DOMContentLoaded', function()
-//  var items = document.getElementsByClassName('mover');
-  var sine = (document.body.scrollTop / 1250);
+  /* Replaced querySelectorAll by getElementsByClass */
+  var items = document.getElementsByClassName('mover');
 
-  //Move this calculation outside of for loop
-  //Set target to 5, only 5 unique phases for each scroll
-  var constArray = [];
-  for (var i = 0; i < 5; i++) {
-    constArray.push(Math.sin(sine + i));
+  /* DOM call repition avoided */
+  var itemsLength = items.length
+  var scrollValue = document.body.scrollTop / 1250;
+
+  for (var i = 0; i < itemsLength; i++) {
+    phase = Math.sin(scrollValue + (i % 5));                            // RS: (i % 5) = {0,1,2,3,4} FOR ALL i >= 0 ; SO ???
+    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
-
-// Declare var phase outside the for loop to prevent it from being created each iteration
-  var phase;
-
-//Reposition pizzas, set target to window.items.length (number of pizzas calculated below)
-  for (i = 0; i < window.items.length; i++) {
-    phase = constArray[i % 5];
-    /* None of these transform statements would properly format the pizzas.
-     * They would bunch up in the middle, only cover half the screen, so I abandoned them
-     * In favor of the old statement
-     */
-    // window.items[i].style.transform = 'translate3d(' + (100 * phase) + 'px, 0, 0)';
-    // items[i].style.transform = 'translate3d(' + ((i % 8) * 256 + (100 * phase)) + 'px, 0, 0)';
-    // window.items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
-    // window.items[i].style.transform = 'translateX(' + ((i % 8) * 256 + (100 * phase)) + 'px)';
-    // window.items[i].style.transform = 'translateX(' + ((i % 8) * 256 + (phase)) + 'px)';
-    // console.log(window.items[1]);
-    window.items[i].style.transform = 'translateX(' +  (100 * phase) + 'px)';
-    // var transX = items[i].basicLeft + 100 * phase + 'px';
-    // window.items[i].style.transform = 'translateX('+transX+')';
-  }
-
-//window.animating = false;
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
   window.performance.mark("mark_end_frame");
   window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
-  if (window.frame % 10 === 0) {
+  if (frame % 10 === 0) {
     var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
     logAverageFrame(timesToUpdatePosition);
   }
@@ -596,39 +511,20 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  var rows = 6;
-  var totalPizzas = 36;
-  // Declare var elem outside the loop to prevent it being created each iteration
-  var elem;
-  // Declare movingPizzas outside the for loop to prevent a DOM call on each iteration
-  // Replace "querySelector" with getElementById
-  var movingPizzas = document.getElementById('movingPizzas1');
-  //var rowTop = 0;
-  // calculate cols and rows based on browser window size
-  // credit https://github.com/uncleoptimus/udacityP4/blob/gh-pages/views/js/main.js
-  cols = Math.ceil(window.innerWidth / (256 - 73.33));
-  rows = Math.ceil(window.innerHeight / 256);
-  totalPizzas = cols * rows;
-  for (var i = 0; i < totalPizzas; i++) {
-    // rowTop = (Math.floor(i / cols) * s);
 
-    // if (rowTop > window.innerHeight) {
-    //   break;
-    // }
-    elem = document.createElement('img');
+/* REDUCED NUMBER OF PIZZAS TO ONLY THAT NECESSARY TO FILL THE SCREEN */
+  var pizzasNeeded = screen.availHeight/s * cols;
+
+  for (var i = 0; i < pizzasNeeded; i++) {
+    var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
-    // Move to css
-    // elem.style.height = "100px";
-    // elem.style.width = "73.333px";
-    //elem.basicLeft = (i % cols) * s;
-    elem.style.left = (i % cols) * s + 'px';
+    elem.style.height = "100px";
+    elem.style.width = "73.333px";
+    elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    movingPizzas.appendChild(elem);
+    /* Replaced querySelector by getElementById*/
+    document.getElementById("movingPizzas1").appendChild(elem);
   }
-  // Move this here to stop updatePositions from re-defining items on every scroll event
-  // credit mcs https://discussions.udacity.com/t/p4-pizza-scrolling-rasterize-paint/30713/12
-  window.items = document.getElementsByClassName('mover');
-  //console.log(window.items);
   updatePositions();
 });

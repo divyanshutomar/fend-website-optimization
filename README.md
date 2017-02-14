@@ -2,7 +2,7 @@
 
 ## Part 1
 
-**Optimized portfolio page for page speed insights score of 90 for mobile and 92 for desktop.**
+**Optimized portfolio page for page speed insights score of 92 for mobile and 95 for desktop.**
 
 Performed the following optimizations:
 
